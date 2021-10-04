@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Random;
+import java.lang.*;
 
 public class Main {
 	
@@ -73,7 +74,9 @@ public class Main {
 		 attack atk = new attack();
 		 react act = new react();
 		 rest rest = new rest();
+		 attack crit = new attack();
 		 int damage = 0;
+		 char uTemp = ' ';
 		 
 		 String[] aiMoves = {"Punch", "Kick", "Defend", "Dodge", "Rest"}; //sets a variable array that will be used for randomly choosing ai battle choice
 		 String aiSelection = " "; //will hold the selection made at random for processing
@@ -126,7 +129,6 @@ public class Main {
 			battleSelection = "What would you like to do? (P)unch, (K)ick, (D)efend, (E)vade, (R)est? "; //resets getSelection since code is restarting and the value will be changed from running process to completion
 			System.out.println(battleSelection);
 			battleSelection = scan(battleSelection); //gets user selection in menu.
-			
 			//add case statement for that selection
 			aiSelection = aiMoves[rand.nextInt(5)]; //sets aiSelection to an option from aiMoves randomly
 			//needs to have aiSelection before player selection for resolving code properly
@@ -137,44 +139,81 @@ public class Main {
 			case 'P':	//case for punch selection
 				if(aiSelection.equals("Defend"))
 				{
-				damage -= atk.Punch(pDamage, aiDefense); //player attacks with punch, calls method for math to calculate in method then return value and subtracts it from aiHealth
+				damage = atk.Punch(pDamage, aiDefense); //player attacks with punch, calls method for math to calculate in method then return value and subtracts it from aiHealth
+				damage *= crit.criticalHit("You"); //checks for critical hit and modifies damage if there is a crit
 				aiHealth -= damage/2;
 				System.out.println("The enemy defended and you inflicted: " + damage / 2 + " points of damage to the enemy");
 				}
 				
 				if(aiSelection.equals("Dodge"))
 				{
-				damage -= atk.Punch(pDamage, aiDefense); //player attacks with punch, calls method for math to calculate in method then return value and subtracts it from aiHealth
+				damage = atk.Punch(pDamage, aiDefense); //player attacks with punch, calls method for math to calculate in method then return value and subtracts it from aiHealth
+				damage *= crit.criticalHit("You"); //checks for critical hit and modifies damage if there is a crit
 				aiHealth -= damage;
 				System.out.println("The enemy tried to dodge but couldn't and you inflicted: " + damage + " points of damage to the enemy");
 				}
 				
 				if(aiSelection.equals("Rest"))
 				{
-				damage -= atk.Punch(pDamage, aiDefense); //player attacks with punch, calls method for math to calculate in method then return value and subtracts it from aiHealth
+				damage = atk.Punch(pDamage, aiDefense); //player attacks with punch, calls method for math to calculate in method then return value and subtracts it from aiHealth
+				damage *= crit.criticalHit("You"); //checks for critical hit and modifies damage if there is a crit
 				aiHealth -= damage;
 				System.out.println("The enemy rested and recovered some health! You inflicted: " + damage + " points of damage to the enemy");
 				}
 				
 				if(aiSelection.equals("Punch") || aiSelection.equals("Kick"))
 				{
-				damage -= atk.Punch(pDamage, aiDefense); //player attacks with punch, calls method for math to calculate in method then return value and subtracts it from aiHealth
+				damage = atk.Punch(pDamage, aiDefense); //player attacks with punch, calls method for math to calculate in method then return value and subtracts it from aiHealth
+				damage *= crit.criticalHit("You"); //checks for critical hit and modifies damage if there is a crit
 				aiHealth -= damage;
 				System.out.println("The enemy also chose to attack! You inflicted: " + damage + " points of damage to the enemy");
 				}
 				break;
+				
 			case 'k': //case for kick selection
 			case 'K':	//case for kick selection
-				damage -= atk.Kick(pDamage, aiDefense); //same as punch but with kick
+				if(aiSelection.equals("Defend"))
+				{
+				damage = atk.Kick(pDamage, aiDefense); //player attacks with punch, calls method for math to calculate in method then return value and subtracts it from aiHealth
+				damage *= crit.criticalHit("You"); //checks for critical hit and modifies damage if there is a crit
+				aiHealth -= damage/2;
+				System.out.println("The enemy defended and you inflicted: " + damage / 2 + " points of damage to the enemy");
+				}
+				
+				if(aiSelection.equals("Dodge"))
+				{
+				System.out.println("The enemy dodged your kick! You did no points of damage to the enemy");
+				}
+				
+				if(aiSelection.equals("Rest"))
+				{
+				damage = atk.Kick(pDamage, aiDefense); //player attacks with punch, calls method for math to calculate in method then return value and subtracts it from aiHealth
+				damage *= crit.criticalHit("You"); //checks for critical hit and modifies damage if there is a crit
 				aiHealth -= damage;
-				System.out.println("You have inflicted: " + damage + " points of damage to the enemy");
+				System.out.println("The enemy rested and recovered some health! You inflicted: " + damage + " points of damage to the enemy");
+				}
+				
+				if(aiSelection.equals("Punch") || aiSelection.equals("Kick"))
+				{
+				damage = atk.Kick(pDamage, aiDefense); //player attacks with punch, calls method for math to calculate in method then return value and subtracts it from aiHealth
+				damage *= crit.criticalHit("You"); //checks for critical hit and modifies damage if there is a crit
+				aiHealth -= damage;
+				System.out.println("The enemy also chose to attack! You inflicted: " + damage + " points of damage to the enemy");
+				}
 				break;
+				
 			case 'd': //case for defend selection
 			case 'D':	//case for defend selection
-			//	pHealth -= act.Defend();
+
+				//may not even need any code here, could probably just handle this in the enemy switch  for attack like I did for player selection.
+				// probably just print out that you selected defend and will take less damage
+				//same for evade and rest 
+				
 			case 'e': //case for evade selection
 			case 'E':	//case for evade selection	
-			//	pHealth -= act.Dodge();
+
+				
+
 			case 'r': //case for rest selection
 			case 'R':	//case for rest selection
 			//	rest.Rested();
@@ -187,11 +226,52 @@ public class Main {
 			case "Punch":
 				damage = atk.Punch(aiDamage, pDefense);
 				pHealth -= damage;
-				System.out.println("The enemy has punched you and inflicted: " + damage + ". You have " + pHealth + " remaining!");
+				System.out.println("The enemy has punched you and inflicted: " + damage + ". You have " + pHealth + " health remaining!");
+				
+				
+				
+				if(battleSelection.charAt(0) == 'd')
+				{
+					uTemp = battleSelection.charAt(0); //sets uTemp to hold character value of player input
+					uTemp = Character.toUpperCase(uTemp); //sets uTemp to be uppercase for fallthrough and less code in this logic
+				}
+				
+				if(uTemp == 'D')
+				{
+				damage = atk.Punch(aiDamage, pDefense); //ai attacks with punch, calls method for math to calculate in method then return value and subtracts it from aiHealth
+				damage *= crit.criticalHit("Enemy"); //checks for critical hit and modifies damage if there is a crit
+				pHealth -= damage/2;
+				System.out.println("The enemy attacked and you defended, they inflicted: " + damage / 2 + " points of damage you!");
+				}
+				
+				if((battleSelection.charAt(0))== 'e')
+				{
+					uTemp = battleSelection.charAt(0); //sets uTemp to hold character value of player input
+					uTemp = Character.toUpperCase(uTemp); //sets uTemp to be uppercase for fallthrough and less code in this logic
+				}
+				
+				if(battleSelection.charAt(0) == 'E')
+				{
+				damage = atk.Punch(pDamage, aiDefense); //ai attacks with punch, calls method for math to calculate in method then return value and subtracts it from aiHealth
+				damage *= crit.criticalHit("Enemy"); //checks for critical hit and modifies damage if there is a crit
+				pHealth -= damage;
+				System.out.println("You tried to dodge but couldn't and the enemy inflicted: " + damage + " points of damage to you");
+				}
+								
+				if(battleSelection.equals("Punch") || battleSelection.equals("Kick"))
+				{
+				damage = atk.Punch(aiDamage, pDefense); //ai attacks with punch, calls method for math to calculate in method then return value and subtracts it from aiHealth
+				damage *= crit.criticalHit("Enemy"); //checks for critical hit and modifies damage if there is a crit
+				pHealth -= damage;
+				System.out.println("The enemy also chose to attack! You inflicted: " + damage + " points of damage to the enemy");
+				}
+				
+				break;
+				
 			case "Kick":
 				damage = atk.Kick(aiDamage, pDefense);
 				pHealth -= damage;
-				System.out.println("The enemy has kicked! you and inflicted: " + damage + ". You have " + pHealth + " remaining!");
+				System.out.println("The enemy has kicked! you and inflicted: " + damage + ". You have " + pHealth + " health remaining!");
 			case "Dodge":
 				//act.Dodge();
 			case "Defend":
@@ -221,5 +301,3 @@ public class Main {
 	 }
 	 
 }//end Main class
-
-//this is a test
