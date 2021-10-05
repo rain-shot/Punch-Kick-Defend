@@ -1,14 +1,26 @@
+import java.util.Random;
 
 public class rest {
 
-	//write some code here for rest method
+	Random resting = new Random();
 	
-	public int Rested()
+	public int Rested(int maxHealth, String x)
 	{
-		//write some code that returns a value when rest is chosen, maybe add some variation to it, maybe give it
-		//like a seed number and a randomizer that will pick based on the seed value which could be some mod function
-		//of the turn you are on
-		return value;
+		int value = 0;
+		
+		while(value == 0) //loop goes if the random value is less than 1 since resting should always increase health by some amount!
+		{
+			value = resting.nextInt(34); //this will return a random number between 0 and 33
+		}
+		
+		double temp = maxHealth * value/100; //sets value of temp
+
+		if (temp < 1.0) //rounds returning value up to 1 if lower since resting should always heal at least 1 point
+		{
+			temp = 1.0;
+		}
+		System.out.println(x + "recovered " + (int)temp + " health!");
+		return (int)temp;
 	}
 	
 }

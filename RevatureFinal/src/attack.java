@@ -49,11 +49,11 @@ public class attack {
 		temp = criticalHit.nextInt(20);
 		if (temp == 19)
 		{
-			System.out.println(x + " got a critical hit!");
+			System.out.println(x + " landed a critical hit!");
 			return 1.15;
 		}
 		
 		return 1;
-	} //critical hit function
+	} //critical hit method
 	
 }
