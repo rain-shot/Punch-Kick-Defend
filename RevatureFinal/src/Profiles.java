@@ -97,8 +97,7 @@ public class Profiles {
 			System.out.println("Incorrect entry, please enter a valid option: Defense, Damage, or Health");
 		}//end switch
 		}//end while
-		//code to run to send back stats, can be called for all stats, just use code here to differentiate which stat
-		//is being returned, either if's or recursive code
+		//code to run to send back stats, can be called for all stats
 
 	}//end stats modifying method
 	
@@ -106,7 +105,6 @@ public class Profiles {
 	{
 		int[] stats = {health, damage, defense}; //sets stats into an array
 		return stats;
-		//return stats
 	}
 	
 	

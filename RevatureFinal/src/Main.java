@@ -13,9 +13,7 @@ public class Main {
 	static Profiles profile = new Profiles(); //creates profile object
 		
 	public static void main(String[] args)
-{		ArrayList<String> result = new ArrayList<String>(); //will be used to track wins and losses, will need to call a method that adds code at the end of each battle that adds an entry and iterates
-		int numOfBattles = 0; //will be used to count battles and iterate later
-		
+{				
 		String getSelection = " "; //variable for user input that will be used throughout program
 		
 		//do a character selection first, or creation if no unit already exists.
@@ -25,6 +23,8 @@ public class Main {
 		
 	//next we need a "menu" so ask what the user wants to do, Fight, look at history, or exit program?
 
+		while((!getSelection.equals("q")) && (!getSelection.equals("Q")))
+		{
 		getSelection = "What would you like to do? (F)ight, (H)istory <this views battle history>, or (Q)uit program"; //resets getSelection since code is restarting and the value will be changed from running process to completion
 		System.out.println(getSelection);
 		getSelection = scan(getSelection); //gets user selection in menu.
@@ -35,17 +35,19 @@ public class Main {
 		
 		case 'f': //case start for Fight
 		case 'F':	//case for fight
-			numOfBattles++; //increments number of battles since you have selected to fight and are engaging in a fight
 			battle();
+			break;
 		case 'h': //case start for History
 		case 'H':	//case for History
-			//history();
+			History.record();
+			break;
 		case 'q': //case start for Exit
 		case 'Q':	//case for Exit
 			System.out.println("You have selected to Exit: Now quiting program!");
 			break;
 		default: System.out.println("Incorrect input selected, please choose a letter in parenthesis to continue!");
-		}
+		}//end switch
+		}//end while loop
 		
 }//end main method
 
@@ -73,6 +75,7 @@ public class Main {
 		 attack atk = new attack();
 		 react act = new react();
 		 rest rest = new rest();
+		 History history = new History();
 		 int damage = 0;
 		 
 		 String[] aiMoves = {"Punch", "Kick", "Defend", "Dodge", "Rest"}; //sets a variable array that will be used for randomly choosing ai battle choice
@@ -129,7 +132,7 @@ public class Main {
 			
 
 			
-			while (true)//pHealth > 0 && aiHealth > 0)
+			while (pHealth > 0 && aiHealth > 0)
 			{
 			battleSelection = "What would you like to do? (P)unch, (K)ick, (D)efend, (E)vade, (R)est? "; //resets getSelection since code is restarting and the value will be changed from running process to completion
 			System.out.println(battleSelection);
@@ -344,7 +347,25 @@ public class Main {
 				break;
 			}//end switch for aiSelection in battle
 				System.out.println("Your remaining health is: " + pHealth); //update player on their health
-			}//end while loop for battle
+
+			
+			if(pHealth <= 0 && aiHealth > 0) //player loses
+			{
+				System.out.println("The battle has ended and you have lost!");
+				history.aftermath("loss");
+			}
+			if(pHealth > 0 && aiHealth <= 0) //player wins
+			{
+				System.out.println("The battle has ended and you have won!");
+				history.aftermath("win");
+			}
+			if(pHealth <= 0 && aiHealth <= 0) //fight ended in a tie
+			{
+				System.out.println("The battle has ended and it was a draw!");
+				history.aftermath("tie");
+			}
+			
+		}//end while loop for battle
 	  }
 
 //	 public String aftermath(String x)
